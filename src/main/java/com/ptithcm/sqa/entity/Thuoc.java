@@ -7,9 +7,10 @@ import jakarta.persistence.*;
 public class Thuoc {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "mathuoc")
+    private int id;
 
-    @Column(name = "ten_thuoc")
+    @Column(name = "tenthuoc")
     private String tenThuoc;
 
     @Column(name = "soluong")
@@ -59,11 +60,11 @@ public class Thuoc {
         this.moTa = moTa;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
