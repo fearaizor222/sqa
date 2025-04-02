@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card mt-5">
+                    <div class="card-body">
+                        <h3 class="card-title text-center">Register</h3>
+                        <!-- Display error message -->
+                        <div th:if="${messages != null}" class="alert alert-danger" role="alert">
+                            <span th:each="message : ${messages}" th:text="${message}"></span>
+                        </div>
+                        <form th:action="@{/authen/register}" method="post" th:object="${NewNguoiDung}">
+                            <div class="mb-3">
+                                <label for="tenNguoiDung" class="form-label">Họ và Tên</label>
+                                <input type="text" class="form-control" id="tenNguoiDung" th:field="*{tenNguoiDung}" name="tenNguoiDung"  required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="soDienThoai" class="form-label">Số điện thoại</label>
+                                <input type="text" class="form-control" id="soDienThoai" name="soDienThoai" th:field="*{soDienThoai}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="diaChi" class="form-label">Địa chỉ</label>
+                                <input type="text" class="form-control" id="diaChi" name="diaChi" th:field="*{diaChi}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="matKhau" class="form-label">Mật Khẩu</label>
+                                <input type="matKhau" class="form-control" id="matKhau" name="matKhau" th:field="*{matKhau}" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Register</button>
+                        </form>
+                        <p class="text-center mt-3">Already have an account? <a th:href="@{/authen/login}">Login here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
