@@ -193,9 +193,9 @@
                     <a th:href="@{/admin/receipts}" class="nav-link">
                         <i class="fas fa-file-invoice"></i> Hóa đơn
                     </a>
-                    <button class="btn add-medicine-btn" data-bs-toggle="modal" data-bs-target="#addMedicineModal">
+                    <a class="btn add-medicine-btn" th:href="@{/admin/medicines/add}">
                         <i class="fas fa-plus"></i>Thêm thuốc mới
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -223,12 +223,12 @@
                         </div>
                     </div>
                     <div class="admin-controls">
-                        <button class="btn btn-sm btn-edit" data-bs-toggle="modal" th:data-bs-target="'#editMedicineModal' + ${medicine.id}">
+                        <a class="btn btn-sm btn-edit" th:href="@{/admin/medicines/edit/{id}(id=${medicine.id})}">
                             <i class="fas fa-edit"></i> Sửa
-                        </button>
-                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" th:data-bs-target="'#deleteMedicineModal' + ${medicine.id}">
+                        </a>
+                        <a class="btn btn-sm btn-danger" th:href="@{/admin/medicines/delete/{id}(id=${medicine.id})}" onclick="return confirm('Bạn có chắc chắn muốn xóa thuốc này không?');">
                             <i class="fas fa-trash"></i> Xóa
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>

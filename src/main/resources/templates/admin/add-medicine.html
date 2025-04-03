@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thêm thuốc mới</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .custom-navbar {
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 15px 0;
+        }
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        .navbar-brand i {
+            color: #4299e1;
+            margin-right: 8px;
+        }
+        .form-container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            background-color: #4299e1;
+            border-color: #4299e1;
+        }
+        .btn-primary:hover {
+            background-color: #3182ce;
+            border-color: #3182ce;
+        }
+        .btn-secondary {
+            background-color: #718096;
+            border-color: #718096;
+        }
+        .btn-secondary:hover {
+            background-color: #4a5568;
+            border-color: #4a5568;
+        }
+        .image-preview {
+            width: 100%;
+            height: 200px;
+            border: 1px dashed #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+        }
+        .image-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar custom-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-pills"></i>
+                Thêm thuốc mới
+            </a>
+            <span class="navbar-text">
+                <a th:href="@{/logout}" class="nav-link">Welcome, <span th:text="${session.LoggedNguoiDung.tenNguoiDung}"></span></a>
+            </span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="form-container">
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                <span th:text="${errorMessage}"></span>
+            </div>
+            
+            <form th:action="@{/admin/medicines/add}" method="post" th:object="${thuoc}">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="tenThuoc" class="form-label">Tên thuốc *</label>
+                        <input type="text" class="form-control" id="tenThuoc" th:field="*{tenThuoc}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="gia" class="form-label">Giá (VNĐ) *</label>
+                        <input type="number" class="form-control" id="gia" th:field="*{gia}" required min="0">
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="soLuong" class="form-label">Số lượng *</label>
+                        <input type="number" class="form-control" id="soLuong" th:field="*{soLuong}" required min="0">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="tuoiSuDung" class="form-label">Tuổi sử dụng *</label>
+                        <input type="text" class="form-control" id="tuoiSuDung" th:field="*{tuoiSuDung}" required>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="thanhPhan" class="form-label">Thành phần</label>
+                    <textarea class="form-control" id="thanhPhan" rows="2" th:field="*{thanhPhan}"></textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="moTa" class="form-label">Mô tả</label>
+                    <textarea class="form-control" id="moTa" rows="2" th:field="*{moTa}"></textarea>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="luuTru" class="form-label">Lưu trữ</label>
+                        <input type="text" class="form-control" id="luuTru" th:field="*{luuTru}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="nhaSanXuat" class="form-label">Nhà sản xuất</label>
+                        <input type="text" class="form-control" id="nhaSanXuat" th:field="*{nhaSanXuat}">
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="tacDungPhu" class="form-label">Tác dụng phụ</label>
+                        <textarea class="form-control" id="tacDungPhu" rows="2" th:field="*{tacDungPhu}"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="quyCach" class="form-label">Quy cách</label>
+                        <textarea class="form-control" id="quyCach" rows="2" th:field="*{quyCach}"></textarea>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="hinhAnh" class="form-label">URL Hình ảnh</label>
+                    <input type="text" class="form-control" id="hinhAnh" th:field="*{hinhAnh}" 
+                           placeholder="Nhập URL hình ảnh (ví dụ: https://example.com/image.jpg)" 
+                           onchange="previewImage(this.value)">
+                </div>
+                
+                <div class="image-preview mb-3" id="imagePreview">
+                    <span id="previewText">Nhập URL hình ảnh để xem trước</span>
+                </div>
+                
+                <div class="d-flex justify-content-end mt-4">
+                    <a th:href="@{/admin/medicine}" class="btn btn-secondary me-2">
+                        <i class="fas fa-arrow-left"></i> Quay lại
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Lưu thuốc
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function previewImage(url) {
+            var preview = document.getElementById('imagePreview');
+            var previewText = document.getElementById('previewText');
+            
+            if (url && url.trim() !== '') {
+                previewText.style.display = 'none';
+                
+                // Kiểm tra nếu đã có ảnh trước đó, xóa đi
+                var oldImg = preview.querySelector('img');
+                if (oldImg) {
+                    preview.removeChild(oldImg);
+                }
+                
+                // Tạo và thêm ảnh mới
+                var img = document.createElement('img');
+                img.src = url;
+                img.onerror = function() {
+                    this.src = '#';
+                    previewText.textContent = 'URL hình ảnh không hợp lệ';
+                    previewText.style.display = 'block';
+                    this.style.display = 'none';
+                };
+                preview.appendChild(img);
+            } else {
+                previewText.style.display = 'block';
+                previewText.textContent = 'Nhập URL hình ảnh để xem trước';
+                var oldImg = preview.querySelector('img');
+                if (oldImg) {
+                    preview.removeChild(oldImg);
+                }
+            }
+        }
+    </script>
+</body>
+</html> 
