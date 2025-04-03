@@ -1,13 +1,13 @@
 package com.ptithcm.sqa.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ptithcm.sqa.entity.Thuoc;
 import com.ptithcm.sqa.repository.ThuocRepository;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ThuocService {
@@ -19,7 +19,7 @@ public class ThuocService {
         return thuocRepository.findAll();
     }
 
-    public Optional<Thuoc> getThuocById(Long id) {
+    public Optional<Thuoc> getThuocById(Integer id) {
         return thuocRepository.findById(id);
     }
 
@@ -27,7 +27,7 @@ public class ThuocService {
         return thuocRepository.save(thuoc);
     }
 
-    public void deleteThuoc(Long id) {
+    public void deleteThuoc(Integer id) {
         thuocRepository.deleteById(id);
     }
 }
