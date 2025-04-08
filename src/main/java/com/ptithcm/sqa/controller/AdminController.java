@@ -1,6 +1,7 @@
 package com.ptithcm.sqa.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.ptithcm.sqa.entity.ChiTietHoaDon;
+import com.ptithcm.sqa.entity.HoaDon;
 import com.ptithcm.sqa.entity.NguoiDung;
 import com.ptithcm.sqa.entity.Thuoc;
+import com.ptithcm.sqa.service.HoaDonService;
 import com.ptithcm.sqa.service.NguoiDungService;
 import com.ptithcm.sqa.service.ThuocService;
 
@@ -33,6 +37,9 @@ public class AdminController {
     
     @Autowired
     private NguoiDungService nguoiDungService;
+    
+    @Autowired
+    private HoaDonService hoaDonService;
 
     @GetMapping("dashboard")
     public String getDashBoard() {
@@ -224,5 +231,67 @@ public class AdminController {
         redirectAttributes.addFlashAttribute("successMessage", "Xóa nhân viên thành công");
         
         return "redirect:/admin/employees";
+    }
+    
+    // =========== QUẢN LÝ HÓA ĐƠN =============
+    
+    @GetMapping("/receipts")
+    public String showReceipts(Model model, 
+                             @RequestParam(defaultValue = "1") int page,
+                             HttpSession session) {
+        // Kiểm tra đăng nhập
+        if (session.getAttribute("LoggedNguoiDung") == null) {
+            return "redirect:/login";
+        }
+        
+        // Kiểm tra vai trò
+        NguoiDung loggedUser = (NguoiDung) session.getAttribute("LoggedNguoiDung");
+        if (loggedUser.getVaiTro() != NguoiDung.UserRole.ql) {
+            return "redirect:/";
+        }
+        
+        // Phân trang hóa đơn
+        Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("maHoaDon").descending());
+        Page<HoaDon> hoaDonPage = hoaDonService.getAllHoaDon(pageable);
+        
+        // Thông tin thống kê
+        Map<String, Object> revenueData = hoaDonService.getRevenueLastWeek();
+        List<Object[]> topEmployees = hoaDonService.getTopEmployeesByRevenue();
+        List<Object[]> topProducts = hoaDonService.getTopSellingProducts();
+        
+        model.addAttribute("hoaDons", hoaDonPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", hoaDonPage.getTotalPages());
+        
+        model.addAttribute("totalRevenue", hoaDonService.getTotalRevenue());
+        model.addAttribute("todayRevenue", hoaDonService.getTodayRevenue());
+        model.addAttribute("todayOrderCount", hoaDonService.getTodayOrderCount());
+        
+        model.addAttribute("revenueLabels", revenueData.get("labels"));
+        model.addAttribute("revenueData", revenueData.get("data"));
+        model.addAttribute("topEmployees", topEmployees);
+        model.addAttribute("topProducts", topProducts);
+        
+        return "admin/receipts";
+    }
+    
+    @GetMapping("/receipts/{id}")
+    public String showReceiptDetail(@PathVariable("id") Integer id, 
+                                  Model model, 
+                                  RedirectAttributes redirectAttributes) {
+        Optional<HoaDon> hoaDonOpt = hoaDonService.getHoaDonById(id);
+        
+        if (hoaDonOpt.isPresent()) {
+            HoaDon hoaDon = hoaDonOpt.get();
+            List<ChiTietHoaDon> chiTietList = hoaDonService.getChiTietByMaHoaDon(id);
+            
+            model.addAttribute("hoaDon", hoaDon);
+            model.addAttribute("chiTietList", chiTietList);
+            
+            return "admin/receipt-detail";
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy hóa đơn với ID: " + id);
+            return "redirect:/admin/receipts";
+        }
     }
 }
