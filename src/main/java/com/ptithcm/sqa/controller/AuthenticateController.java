@@ -41,7 +41,7 @@ public class AuthenticateController {
         if (isAuthenticated.isPresent()) {
             session.setAttribute("LoggedNguoiDung", isAuthenticated.get());
             if (isAuthenticated.get().getVaiTro() == UserRole.ql) {
-                return "redirect:/admin/dashboard";
+                return "redirect:/admin/medicine";
             } else if (isAuthenticated.get().getVaiTro() == UserRole.khachhang) {
                 return "redirect:/";
             }

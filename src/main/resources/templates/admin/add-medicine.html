@@ -60,6 +60,26 @@
             max-height: 100%;
             object-fit: contain;
         }
+        .nav-link:hover {
+            color: #4299e1;
+        }
+        .logout-link {
+            display: flex;
+            align-items: center;
+            color: #4a5568;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .logout-link:hover {
+            background-color: #f7fafc;
+            color: #e53e3e;
+            text-decoration: none;
+        }
+        .logout-link i {
+            margin-right: 8px;
+        }
     </style>
 </head>
 <body>
@@ -70,7 +90,10 @@
                 Thêm thuốc mới
             </a>
             <span class="navbar-text">
-                <a th:href="@{/logout}" class="nav-link">Welcome, <span th:text="${session.LoggedNguoiDung.tenNguoiDung}"></span></a>
+                <a th:href="@{/logout}" class="logout-link">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Welcome, <span th:text="${session.LoggedNguoiDung.tenNguoiDung}"></span>
+                </a>
             </span>
         </div>
     </nav>

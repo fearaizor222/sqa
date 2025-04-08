@@ -41,6 +41,23 @@
         .nav-link:hover {
             color: #4299e1;
         }
+        .logout-link {
+            display: flex;
+            align-items: center;
+            color: #4a5568;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .logout-link:hover {
+            background-color: #f7fafc;
+            color: #e53e3e;
+            text-decoration: none;
+        }
+        .logout-link i {
+            margin-right: 8px;
+        }
         .card {
             border: none;
             border-radius: 10px;
@@ -180,11 +197,14 @@
         <div class="container">
             <div class="navbar-container">
                 <a class="navbar-brand" href="#">
-                    <i class="fas fa-file-invoice-dollar"></i>
+                    <i class="fas fa-file-invoice"></i>
                     Quản lý hóa đơn
                 </a>
                 <span class="navbar-text">
-                    <a th:href="@{/logout}" class="nav-link">Welcome, <span th:text="${session.LoggedNguoiDung.tenNguoiDung}"></span></a>
+                    <a th:href="@{/logout}" class="logout-link">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Welcome, <span th:text="${session.LoggedNguoiDung.tenNguoiDung}"></span>
+                    </a>
                 </span>
                 <div class="nav-links">
                     <a th:href="@{/admin/medicine}" class="nav-link">
