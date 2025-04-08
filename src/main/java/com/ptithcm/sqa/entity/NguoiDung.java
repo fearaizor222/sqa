@@ -2,6 +2,7 @@ package com.ptithcm.sqa.entity;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "nguoidung")
@@ -26,6 +27,10 @@ public class NguoiDung implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "vaitro", nullable = false)
     private UserRole vaiTro;
+
+    // @OneToMany(mappedBy = "nguoiDung", cascade = CascadeType.ALL, fetch =
+    // FetchType.EAGER)
+    // private List<HoaDon> hoaDons;
 
     public NguoiDung() {
     }
@@ -97,7 +102,14 @@ public class NguoiDung implements Serializable {
                 ", vaiTro=" + vaiTro +
                 '}';
     }
-    
+
+    // public List<HoaDon> getHoaDons() {
+    // return hoaDons;
+    // }
+
+    // public void setHoaDons(List<HoaDon> hoaDons) {
+    // this.hoaDons = hoaDons;
+    // }
 
     public static enum UserRole {
         nvgh,

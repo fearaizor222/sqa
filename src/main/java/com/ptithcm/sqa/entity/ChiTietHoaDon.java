@@ -3,6 +3,7 @@ package com.ptithcm.sqa.entity;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "chitiethoadon")
@@ -22,16 +23,20 @@ public class ChiTietHoaDon implements Serializable {
     private Integer soLuong;
 
     @Column(name = "giaban", nullable = false)
-    private BigDecimal giaBan;
+    private double giaBan;
+
+    @Column(name = "ngaylap", nullable = false)
+    private LocalDateTime ngayLap = LocalDateTime.now();
 
     public ChiTietHoaDon() {
     }
 
-    public ChiTietHoaDon(HoaDon hoaDon, Thuoc thuoc, Integer soLuong, BigDecimal giaBan) {
+    public ChiTietHoaDon(HoaDon hoaDon, Thuoc thuoc, Integer soLuong, double giaBan, LocalDateTime ngaylap) {
         this.hoaDon = hoaDon;
         this.thuoc = thuoc;
         this.soLuong = soLuong;
         this.giaBan = giaBan;
+        this.ngayLap = ngaylap;
     }
 
     public HoaDon getHoaDon() {
@@ -58,15 +63,23 @@ public class ChiTietHoaDon implements Serializable {
         this.soLuong = soLuong;
     }
 
-    public BigDecimal getGiaBan() {
+    public double getGiaBan() {
         return giaBan;
     }
 
-    public void setGiaBan(BigDecimal giaBan) {
+    public void setGiaBan(double giaBan) {
         this.giaBan = giaBan;
     }
-    
-    public BigDecimal getThanhTien() {
-        return giaBan.multiply(new BigDecimal(soLuong));
+
+    public LocalDateTime getNgayLap() {
+        return ngayLap;
     }
-} 
+
+    public void setNgayLap(LocalDateTime ngayLap) {
+        this.ngayLap = ngayLap;
+    }
+
+    public double getThanhTien() {
+        return giaBan * soLuong;
+    }
+}

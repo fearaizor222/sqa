@@ -223,10 +223,10 @@
                         </div>
                     </div>
                     <div class="admin-controls">
-                        <a class="btn btn-sm btn-edit" th:href="@{/admin/medicines/edit/{id}(id=${medicine.id})}">
+                        <a class="btn btn-sm btn-edit" th:href="@{/admin/medicines/edit/{id}(id=${medicine.maThuoc})}">
                             <i class="fas fa-edit"></i> Sửa
                         </a>
-                        <a class="btn btn-sm btn-danger" th:href="@{/admin/medicines/delete/{id}(id=${medicine.id})}" onclick="return confirm('Bạn có chắc chắn muốn xóa thuốc này không?');">
+                        <a class="btn btn-sm btn-danger" th:href="@{/admin/medicines/delete/{id}(id=${medicine.maThuoc})}" onclick="return confirm('Bạn có chắc chắn muốn xóa thuốc này không?');">
                             <i class="fas fa-trash"></i> Xóa
                         </a>
                     </div>

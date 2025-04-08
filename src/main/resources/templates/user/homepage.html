@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tìm kiếm sản phẩm</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: white;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Menu Box */
+        .menu-box-border {
+            background-color: #4299e1;
+            color: white;
+            padding: 10px;
+        }
+
+        .username-box-border {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .menu-box-border a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 16px; 
+            border-radius: 6px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        
+        /* Hover effect */
+        .menu-box-border a:hover {
+            background-color: #3182ce; /* Màu nền khi hover giống nút "Xem chi tiết" */
+            transform: translateY(-2px); /* Hiệu ứng nổi lên khi hover */
+        }
+
+        .menu-box-border a:hover i {
+            color: white;
+        }
+
+        /* Áp dụng hiệu ứng cho các nút trong menu */
+        .navbar-nav .nav-item a {
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        /* Hover effect */
+        .navbar-nav .nav-item a:hover {
+            background-color: #3182ce;
+            transform: translateY(-2px); 
+        }
+
+        /* Đổi màu cho phần tử active */
+        .navbar-nav .nav-item a.active {
+            background-color: #3182ce;
+            color: white;
+        }
+
+        .username-box-border a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .username-box-border i {
+            margin-right: 8px;
+        }
+
+        .username-box-border a:hover {
+            color: #ee2624;
+        }
+
+        .menu-box-border a span {
+            margin-left: 5px;
+            font-size: 16px;
+        }
+
+        /* Icon trong thanh menu */
+        .menu-box-border i {
+            margin-right: 8px;
+        }
+
+        /* Đổi màu cho phần tử active */
+        .menu-box-border a.active {
+            background-color: #3182ce;
+            color: white;
+        }
+
+        /* Hover effect for the user dropdown */
+        .username-box-border .dropdown-menu {
+            display: none;
+        }
+
+        .username-box-border .show-dropdown {
+            display: block;
+        }
+
+        /* Function Boxes */
+        .function-box-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .function-box {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .function-box,
+        .functionFind-box,
+        .order-button {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .function-box:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .functionFind-box {
+            padding: 10px;
+            width: 300px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .form-select {
+            width: 220px;
+            border-radius: 6px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .form-select:focus {
+            border-color: #007BFF;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        /* Product Card Style */
+        .product-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            height: 450px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .product-title {
+            font-size: 1rem;
+            margin: 10px 0;
+            height: 40px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .product-description {
+            font-size: 0.9rem;
+            color: #666;
+            height: 40px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            margin-bottom: 10px;
+        }
+
+        .price {
+            color: #ee2624;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+
+        .pagination-container {
+            position: fixed;
+            bottom: 20px; /* Điều chỉnh khoảng cách từ dưới lên */
+            width: 100%;
+            background-color: transparent; /* Bỏ màu nền cho cả thanh */
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            z-index: 9999;
+        }
+
+        .pagination .page-item {
+            list-style: none;
+        }
+
+        .pagination .page-link {
+            padding: 12px 16px; /* Tăng chiều cao của nút phân trang */
+            border: 2px solid #007BFF;
+            border-radius: 50%; /* Tạo dạng ô vuông thoi */
+            color: #007BFF;
+            text-decoration: none;
+            background-color: white; /* Nền trắng cho nút */
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ nhẹ */
+        }
+
+        /* Hover effect */
+        .pagination .page-link:hover {
+            background-color: #007BFF;
+            color: white;
+            transform: translateY(-2px); /* Thêm hiệu ứng nổi lên khi hover */
+        }
+
+        .pagination .page-link:hover {
+            background-color: #0056b3;
+        }
+
+        .pagination .active .page-link {
+            background-color: #007BFF;
+            color: white;
+            border-color: #007BFF;
+        }
+
+        .pagination .disabled .page-link {
+            color: #a0aec0;
+            pointer-events: none;
+        }
+
+        /* User Box */
+        .order-button {
+            margin-top: auto;
+            background-color: #4299e1;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .order-button:hover {
+            background-color: #4299e1;
+            transform: translateY(-1px);
+        }
+
+        .order-button i {
+            margin-right: 8px;
+        }
+
+        .btn-custom {
+            background-color: #4299e1;
+            border: none;
+          }
+        
+          .btn-custom:hover {
+            background-color: #3182ce;
+            color: white;
+          }
+        
+          .navbar-brand:hover {
+            color: #d1e0ff;
+          }
+          /* Ẩn dropdown ban đầu */
+          #user-dropdown {
+              display: none;
+              position: absolute;
+              right: 25px;
+              background-color: #fff;
+              border: 1px solid #ccc;
+              border-radius: 8px;
+              min-width: 220px;
+              padding: 10px 0;
+              box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+              z-index: 1000;
+          }
+          
+          /* Khi dropdown mở */
+          #user-dropdown.show {
+              display: block;
+          }
+          
+          /* Style cho từng item */
+          #user-dropdown .dropdown-item {
+              display: block;
+              padding: 10px 20px;
+              color: #777; /* chữ xám ban đầu */
+              font-weight: bold; /* in đậm */
+              text-decoration: none;
+              transition: color 0.3s, background-color 0.3s;
+          }
+          
+          /* Hover vào item */
+          #user-dropdown .dropdown-item:hover {
+              color: #000; /* chữ đen */
+              background-color: #e0e0e0; /* nền xám nhạt */
+          }
+          
+          /* Style cho đường gạch ngang <hr> */
+          #user-dropdown hr {
+              margin: 8px 0;
+              border: none;
+              border-top: 1px solid #ddd;
+          }
+          
+    </style>
+</head>
+
+<body>
+    <!-- Menu Box -->
+    <div class="menu-box-border d-flex align-items-center justify-content-between">
+        <nav class="navbar navbar-expand-lg" style="background-color: #4299e1;">
+            <div class="container-fluid">
+              <a class="navbar-brand text-white fw-bold" th:href="@{/}">Trang chủ</a>
+          
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+          
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                  <li class="nav-item">
+                    <a class="nav-link text-white fw-bold" th:href="@{/paid-orders}">Xem đơn</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-white fw-bold" th:href="@{/cart}">🛒 Giỏ hàng</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+          
+        <div class="username-box-border d-flex align-items-center">
+            <div th:if="${session.LoggedNguoiDung != null}">
+                <a href="#" id="user-dropdown-toggle" class="text-white">
+                    <i class="fa-regular fa-circle-user" th:text="${' ' + #strings.toLowerCase(session.LoggedNguoiDung.tenNguoiDung)}"></i>
+                </a>
+
+                <div id="user-dropdown" class="dropdown-menu">
+                    <a href="#" th:href="@{/user/userinfo}" class="dropdown-item">Chỉnh sửa thông tin người dùng</a>
+                    <hr>
+                    <a href="#" th:href="@{/authen/logout}" class="dropdown-item">Đăng xuất</a>
+                </div>
+
+            </div>
+            <div th:unless="${session.LoggedNguoiDung != null}">
+                <a th:href="@{/authen/login}" class="text-white">
+                    <i class="fa-regular fa-circle-user"> Guest</i>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Function Box Container -->
+    <div class="container">
+        <form method="GET" class="d-flex align-items-center">
+            
+            <!-- Age Group Selector -->
+            <div class="ms-4 me-3">
+                <select id="group" name="group" class="form-select" onchange="this.form.submit()">
+                    <option value="all" th:selected="${group == 'all'}">Tất cả</option>
+                    <option value="over18" th:selected="${group == 'over18'}">Trên 18 tuổi</option>
+                    <option value="over12" th:selected="${group == 'over12'}">Trên 12 tuổi</option>
+                    <option value="over8" th:selected="${group == 'over8'}">Trên 8 tuổi</option>
+                    <option value="over4" th:selected="${group == 'over4'}">Trên 4 tuổi</option>
+                </select>
+            </div>
+
+            <!-- Search Form -->
+            <input type="text" class="functionFind-box" name="search" placeholder="Nhập thông tin sản phẩm cần tìm" 
+                   th:value="${param.search}" required>
+            <button class="function-box" type="submit" style="margin-left: 30px;">Tìm kiếm</button>
+        </form>
+    </div>
+    
+    
+
+    <!-- Product Box Container -->
+    <div class="container mt-4">
+        <div class="row product-box-container" th:style="${!has_products} ? 'display: none' : ''">
+            <div class="col-md-3" th:each="product : ${products}">
+                <div class="product-card">
+                    <div class="product-content">
+                        <img th:src="${product.hinhAnh}" th:alt="${product.tenThuoc}" class="product-image">
+                        <h5 class="product-title" th:text="${product.tenThuoc}"></h5>
+                        <p class="product-description" th:text="${product.moTa}"></p>
+                        <div class="price">
+                            <span th:text="${#numbers.formatDecimal(product.gia, 0, 'COMMA', 0, 'POINT')} + 'đ'"></span>
+                        </div>
+                    </div>
+                    <a th:href="@{/product/{tenThuoc}(tenThuoc=${product.tenThuoc})}" class="btn btn-primary order-button">
+                        <i class="fas fa-eye"></i> Xem chi tiết
+                    </a>                    
+                                     
+                </div>
+            </div>
+        </div>
+
+        <div class="no-products-message" th:if="${!has_products}">
+            <p th:text="'Không tìm thấy sản phẩm phù hợp với từ khóa &quot;' + ${search} + '&quot;'"></p>
+        </div>
+    </div>
+
+    <!-- Pagination Container -->
+    <div class="pagination-container" th:style="${!has_products} ? 'display: none' : ''">
+        <div class="pagination">
+            <th:block th:each="i : ${#numbers.sequence(1, total_pages)}">
+                <span th:if="${i == page}" class="current-page" th:text="${i}"></span>
+                <a th:unless="${i == page}" th:href="@{'/?page=' + ${i} + '&search=' + ${search}}" 
+                   class="page-link" th:text="${i}"></a>
+            </th:block>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButton = document.getElementById('user-dropdown-toggle');
+            const dropdownMenu = document.getElementById('user-dropdown');
+    
+            toggleButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                dropdownMenu.classList.toggle('show');
+            });
+    
+            // Đóng dropdown khi click ra ngoài
+            document.addEventListener('click', function(e) {
+                if (!toggleButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                    dropdownMenu.classList.remove('show');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

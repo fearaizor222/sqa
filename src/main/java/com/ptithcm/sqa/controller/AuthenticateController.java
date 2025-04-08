@@ -39,12 +39,11 @@ public class AuthenticateController {
             Model model) {
         Optional<NguoiDung> isAuthenticated = authenticateService.authenticate(username, password);
         if (isAuthenticated.isPresent()) {
-            session.setAttribute("LoggedNguoiDung",isAuthenticated.get());
-            if(isAuthenticated.get().getVaiTro() == UserRole.ql) {
+            session.setAttribute("LoggedNguoiDung", isAuthenticated.get());
+            if (isAuthenticated.get().getVaiTro() == UserRole.ql) {
                 return "redirect:/admin/dashboard";
-            }
-            else if (isAuthenticated.get().getVaiTro() == UserRole.khachhang) {
-                return "redirect:/user/dashboard";
+            } else if (isAuthenticated.get().getVaiTro() == UserRole.khachhang) {
+                return "redirect:/";
             }
         } else {
             model.addAttribute("messages", List.of("Invalid username or password"));

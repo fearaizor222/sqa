@@ -81,8 +81,8 @@
                 <span th:text="${errorMessage}"></span>
             </div>
             
-            <form th:action="@{/admin/medicines/edit/{id}(id=${thuoc.id})}" method="post" th:object="${thuoc}">
-                <input type="hidden" th:field="*{id}">
+            <form th:action="@{/admin/medicines/edit/{id}(id=${thuoc.maThuoc})}" method="post" th:object="${thuoc}">
+                <input type="hidden" th:field="*{maThuoc}">
                 
                 <div class="row mb-3">
                     <div class="col-md-6">

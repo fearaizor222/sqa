@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class ChiTietHoaDonId implements Serializable {
-    private Integer hoaDon; // Phải trùng với tên thuộc tính trong ChiTietHoaDon
-    private Integer thuoc;  // Phải trùng với tên thuộc tính trong ChiTietHoaDon
+    private Integer hoaDon;
+    private Integer thuoc;
 
     public ChiTietHoaDonId() {
     }
@@ -33,8 +33,10 @@ public class ChiTietHoaDonId implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         ChiTietHoaDonId that = (ChiTietHoaDonId) o;
         return Objects.equals(hoaDon, that.hoaDon) && Objects.equals(thuoc, that.thuoc);
     }
@@ -43,4 +45,4 @@ public class ChiTietHoaDonId implements Serializable {
     public int hashCode() {
         return Objects.hash(hoaDon, thuoc);
     }
-} 
+}

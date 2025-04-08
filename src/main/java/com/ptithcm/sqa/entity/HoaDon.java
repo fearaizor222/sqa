@@ -37,10 +37,10 @@ public class HoaDon implements Serializable {
 
     @Column(name = "tongtien", nullable = false)
     private BigDecimal tongTien;
-    
+
     @Column(name = "trangthai", nullable = false)
     private String trangThai;
-    
+
     @OneToMany(mappedBy = "hoaDon", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ChiTietHoaDon> chiTietHoaDons;
 
@@ -85,7 +85,7 @@ public class HoaDon implements Serializable {
     public void setTongTien(BigDecimal tongTien) {
         this.tongTien = tongTien;
     }
-    
+
     public String getTrangThai() {
         return trangThai;
     }
@@ -101,4 +101,8 @@ public class HoaDon implements Serializable {
     public void setChiTietHoaDons(List<ChiTietHoaDon> chiTietHoaDons) {
         this.chiTietHoaDons = chiTietHoaDons;
     }
-} 
+
+    public void updateTongTien(BigDecimal tongTien) {
+        this.tongTien = tongTien;
+    }
+}

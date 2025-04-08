@@ -1,5 +1,7 @@
 package com.ptithcm.sqa.entity;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -8,16 +10,16 @@ public class Thuoc {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "mathuoc")
-    private int id;
+    private int maThuoc;
 
     @Column(name = "tenthuoc")
     private String tenThuoc;
 
-    @Column(name = "soluong")
-    private int soLuong;
-
     @Column(name = "gia")
     private double gia;
+
+    @Column(name = "soluong")
+    private int soLuong;
 
     @Column(name = "tuoisudung")
     private String tuoiSuDung;
@@ -43,10 +45,16 @@ public class Thuoc {
     @Column(name = "mota", columnDefinition = "TEXT")
     private String moTa;
 
+    @Column(name = "ten_thuoc")
+    private String tenThuoc2;
+
+    // Default constructor
     public Thuoc() {
     }
 
-    public Thuoc(String tenThuoc, int soLuong, double gia, String tuoiSuDung, String thanhPhan, String luuTru, String tacDungPhu, String quyCach, String hinhAnh, String nhaSanXuat, String moTa) {
+    // Constructor with all parameters
+    public Thuoc(String tenThuoc, int soLuong, double gia, String tuoiSuDung, String thanhPhan, String luuTru,
+            String tacDungPhu, String quyCach, String hinhAnh, String nhaSanXuat, String moTa, String tenThuoc2) {
         this.tenThuoc = tenThuoc;
         this.soLuong = soLuong;
         this.gia = gia;
@@ -58,14 +66,16 @@ public class Thuoc {
         this.hinhAnh = hinhAnh;
         this.nhaSanXuat = nhaSanXuat;
         this.moTa = moTa;
+        this.tenThuoc2 = tenThuoc2;
     }
 
-    public int getId() {
-        return id;
+    // Getters and setters
+    public int getMaThuoc() {
+        return maThuoc;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setMaThuoc(int maThuoc) {
+        this.maThuoc = maThuoc;
     }
 
     public String getTenThuoc() {
@@ -154,5 +164,13 @@ public class Thuoc {
 
     public void setMoTa(String moTa) {
         this.moTa = moTa;
+    }
+
+    public String getTenThuoc2() {
+        return tenThuoc2;
+    }
+
+    public void setTenThuoc2(String tenThuoc2) {
+        this.tenThuoc2 = tenThuoc2;
     }
 }
