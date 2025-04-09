@@ -104,26 +104,34 @@
                 <span th:text="${errorMessage}"></span>
             </div>
             
+            <div class="alert alert-info" role="alert">
+                <i class="fas fa-info-circle me-2"></i> Các trường đánh dấu * là bắt buộc phải nhập.
+            </div>
+            
             <form th:action="@{/admin/medicines/add}" method="post" th:object="${thuoc}">
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="tenThuoc" class="form-label">Tên thuốc *</label>
-                        <input type="text" class="form-control" id="tenThuoc" th:field="*{tenThuoc}" required>
+                        <input type="text" class="form-control" id="tenThuoc" th:field="*{tenThuoc}">
+                        <div class="invalid-feedback" id="tenThuoc-error">Tên thuốc không được để trống</div>
                     </div>
                     <div class="col-md-6">
                         <label for="gia" class="form-label">Giá (VNĐ) *</label>
-                        <input type="number" class="form-control" id="gia" th:field="*{gia}" required min="0">
+                        <input type="number" class="form-control" id="gia" th:field="*{gia}" min="0">
+                        <div class="invalid-feedback" id="gia-error">Giá thuốc phải lớn hơn 0</div>
                     </div>
                 </div>
                 
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="soLuong" class="form-label">Số lượng *</label>
-                        <input type="number" class="form-control" id="soLuong" th:field="*{soLuong}" required min="0">
+                        <input type="number" class="form-control" id="soLuong" th:field="*{soLuong}" min="0">
+                        <div class="invalid-feedback" id="soLuong-error">Số lượng thuốc không được để trống</div>
                     </div>
                     <div class="col-md-6">
                         <label for="tuoiSuDung" class="form-label">Tuổi sử dụng *</label>
-                        <input type="text" class="form-control" id="tuoiSuDung" th:field="*{tuoiSuDung}" required>
+                        <input type="text" class="form-control" id="tuoiSuDung" th:field="*{tuoiSuDung}">
+                        <div class="invalid-feedback" id="tuoiSuDung-error">Tuổi sử dụng không được để trống</div>
                     </div>
                 </div>
                 
@@ -216,6 +224,55 @@
                 }
             }
         }
+
+        // Custom form validation
+        document.querySelector('form').addEventListener('submit', function(event) {
+            let hasErrors = false;
+            
+            // Validate Tên thuốc
+            const tenThuocInput = document.getElementById('tenThuoc');
+            if (!tenThuocInput.value.trim()) {
+                tenThuocInput.classList.add('is-invalid');
+                hasErrors = true;
+            } else {
+                tenThuocInput.classList.remove('is-invalid');
+            }
+            
+            // Validate Giá
+            const giaInput = document.getElementById('gia');
+            if (!giaInput.value || parseFloat(giaInput.value) <= 0) {
+                giaInput.classList.add('is-invalid');
+                document.getElementById('gia-error').textContent = 
+                    !giaInput.value ? 'Giá thuốc không được để trống' : 'Giá thuốc phải lớn hơn 0';
+                hasErrors = true;
+            } else {
+                giaInput.classList.remove('is-invalid');
+            }
+            
+            // Validate Số lượng
+            const soLuongInput = document.getElementById('soLuong');
+            if (!soLuongInput.value || parseInt(soLuongInput.value) < 0) {
+                soLuongInput.classList.add('is-invalid');
+                document.getElementById('soLuong-error').textContent = 
+                    !soLuongInput.value ? 'Số lượng thuốc không được để trống' : 'Số lượng thuốc không được âm';
+                hasErrors = true;
+            } else {
+                soLuongInput.classList.remove('is-invalid');
+            }
+            
+            // Validate Tuổi sử dụng
+            const tuoiSuDungInput = document.getElementById('tuoiSuDung');
+            if (!tuoiSuDungInput.value.trim()) {
+                tuoiSuDungInput.classList.add('is-invalid');
+                hasErrors = true;
+            } else {
+                tuoiSuDungInput.classList.remove('is-invalid');
+            }
+            
+            if (hasErrors) {
+                event.preventDefault();
+            }
+        });
     </script>
 </body>
 </html> 

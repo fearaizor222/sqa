@@ -102,17 +102,13 @@ public class ThuocServiceTest {
         thuocTrong.setSoLuong(100);
         thuocTrong.setTuoiSuDung(""); // Tuổi sử dụng trống
         
-        // Kiểm tra ràng buộc trước khi lưu (giả lập validator)
+        // Thực hiện và kiểm tra
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            // Giả lập việc kiểm tra ràng buộc trước khi lưu
-            if (thuocTrong.getTenThuoc() == null || thuocTrong.getTenThuoc().isEmpty() || 
-                thuocTrong.getTuoiSuDung() == null || thuocTrong.getTuoiSuDung().isEmpty()) {
-                throw new IllegalArgumentException("Các trường bắt buộc không được để trống");
-            }
             thuocService.saveThuoc(thuocTrong);
         });
         
-        assertEquals("Các trường bắt buộc không được để trống", exception.getMessage());
+        // Kiểm tra thông báo lỗi
+        assertEquals("Tên thuốc không được để trống", exception.getMessage());
         verify(thuocRepository, never()).save(any(Thuoc.class));
     }
 
@@ -126,16 +122,13 @@ public class ThuocServiceTest {
         thuocGiaAm.setSoLuong(-10);   // Số lượng âm
         thuocGiaAm.setTuoiSuDung("36 tháng");
         
-        // Kiểm tra ràng buộc trước khi lưu (giả lập validator)
+        // Thực hiện và kiểm tra
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            // Giả lập việc kiểm tra ràng buộc trước khi lưu
-            if (thuocGiaAm.getGia() < 0 || thuocGiaAm.getSoLuong() < 0) {
-                throw new IllegalArgumentException("Giá và số lượng phải lớn hơn hoặc bằng 0");
-            }
             thuocService.saveThuoc(thuocGiaAm);
         });
         
-        assertEquals("Giá và số lượng phải lớn hơn hoặc bằng 0", exception.getMessage());
+        // Kiểm tra thông báo lỗi
+        assertEquals("Giá thuốc không được âm", exception.getMessage());
         verify(thuocRepository, never()).save(any(Thuoc.class));
     }
 
@@ -212,17 +205,12 @@ public class ThuocServiceTest {
         thuoc.setTenThuoc(thuocCapNhat.getTenThuoc());
         thuoc.setTuoiSuDung(thuocCapNhat.getTuoiSuDung());
         
-        // Kiểm tra ràng buộc trước khi lưu (giả lập validator)
+        // Thực hiện và kiểm tra
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            // Giả lập việc kiểm tra ràng buộc trước khi lưu
-            if (thuoc.getTenThuoc() == null || thuoc.getTenThuoc().isEmpty() || 
-                thuoc.getTuoiSuDung() == null || thuoc.getTuoiSuDung().isEmpty()) {
-                throw new IllegalArgumentException("Các trường bắt buộc không được để trống");
-            }
             thuocService.saveThuoc(thuoc);
         });
         
-        assertEquals("Các trường bắt buộc không được để trống", exception.getMessage());
+        assertEquals("Tên thuốc không được để trống", exception.getMessage());
         verify(thuocRepository, times(1)).findById(1);
         verify(thuocRepository, never()).save(any(Thuoc.class));
     }
@@ -255,12 +243,8 @@ public class ThuocServiceTest {
         Thuoc thuoc = thuocOptional.get();
         thuoc.setGia(thuocCapNhat.getGia());
         
-        // Kiểm tra ràng buộc trước khi lưu (giả lập validator)
+        // Thực hiện và kiểm tra
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            // Giả lập việc kiểm tra ràng buộc trước khi lưu
-            if (thuoc.getGia() < 0) {
-                throw new IllegalArgumentException("Giá thuốc không được âm");
-            }
             thuocService.saveThuoc(thuoc);
         });
         
@@ -297,12 +281,8 @@ public class ThuocServiceTest {
         Thuoc thuoc = thuocOptional.get();
         thuoc.setSoLuong(thuocCapNhat.getSoLuong());
         
-        // Kiểm tra ràng buộc trước khi lưu (giả lập validator)
+        // Thực hiện và kiểm tra
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            // Giả lập việc kiểm tra ràng buộc trước khi lưu
-            if (thuoc.getSoLuong() < 0) {
-                throw new IllegalArgumentException("Số lượng thuốc không được âm");
-            }
             thuocService.saveThuoc(thuoc);
         });
         
@@ -364,4 +344,4 @@ public class ThuocServiceTest {
         assertEquals(thuoc.getMoTa(), ketQua.getMoTa());
         assertNotNull(ketQua.getHinhAnh());
     }
-} 
+}

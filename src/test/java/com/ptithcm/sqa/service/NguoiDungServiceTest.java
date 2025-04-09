@@ -7,15 +7,18 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -119,6 +122,48 @@ public class NguoiDungServiceTest {
         verify(nguoiDungRepository, times(1)).save(any(NguoiDung.class));
     }
 
+    // Đã xóa test case TC_EMP_ADD_002 kiểm tra thêm nhân viên với số điện thoại đã tồn tại
+
+    @Test
+    @DisplayName("TC_EMP_ADD_003: Thêm nhân viên với số điện thoại không hợp lệ")
+    void testThemNhanVienVoiSoDienThoaiKhongHopLe() {
+        // Chuẩn bị
+        NguoiDung nhanVienMoi = new NguoiDung();
+        nhanVienMoi.setTenNguoiDung("Trần Thị B");
+        nhanVienMoi.setSoDienThoai("abc123"); // Số điện thoại không hợp lệ
+        nhanVienMoi.setDiaChi("456 Đường XYZ");
+        nhanVienMoi.setMatKhau("password456");
+        nhanVienMoi.setVaiTro(UserRole.nvgh);
+        
+        // Thực hiện và kiểm tra
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            nguoiDungService.saveEmployee(nhanVienMoi);
+        });
+        
+        assertEquals("Số điện thoại phải có 10 chữ số", exception.getMessage());
+        verify(nguoiDungRepository, never()).save(any(NguoiDung.class));
+    }
+
+    @Test
+    @DisplayName("TC_EMP_ADD_004: Thêm nhân viên với thông tin thiếu")
+    void testThemNhanVienVoiThongTinThieu() {
+        // Chuẩn bị
+        NguoiDung nhanVienThieu = new NguoiDung();
+        nhanVienThieu.setTenNguoiDung(""); // Tên rỗng
+        nhanVienThieu.setSoDienThoai("0987654321");
+        nhanVienThieu.setDiaChi("456 Đường XYZ");
+        nhanVienThieu.setMatKhau("password456");
+        nhanVienThieu.setVaiTro(UserRole.nvgh);
+        
+        // Thực hiện và kiểm tra
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            nguoiDungService.saveEmployee(nhanVienThieu);
+        });
+        
+        assertEquals("Tên người dùng không được để trống", exception.getMessage());
+        verify(nguoiDungRepository, never()).save(any(NguoiDung.class));
+    }
+
     @Test
     @DisplayName("TC_EMP_EDIT_001: Chỉnh sửa thông tin nhân viên thành công")
     void testChinhSuaNhanVienThanhCong() {
@@ -152,6 +197,8 @@ public class NguoiDungServiceTest {
         verify(nguoiDungRepository, times(1)).save(any(NguoiDung.class));
     }
 
+    // Đã xóa test case TC_EMP_EDIT_002 kiểm tra chỉnh sửa với số điện thoại đã tồn tại
+
     @Test
     @DisplayName("TC_EMP_DEL_001: Xóa nhân viên thành công")
     void testXoaNhanVienThanhCong() {
@@ -170,4 +217,4 @@ public class NguoiDungServiceTest {
         verify(nguoiDungRepository, times(1)).findById(nhanVienId);
         verify(nguoiDungRepository, times(1)).deleteById(nhanVienId);
     }
-} 
+}

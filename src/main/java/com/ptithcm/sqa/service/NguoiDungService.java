@@ -32,11 +32,58 @@ public class NguoiDungService {
     }
 
     public NguoiDung saveEmployee(NguoiDung nguoiDung) {
+        validateNguoiDung(nguoiDung);
         return nguoiDungRepository.save(nguoiDung);
     }
 
     public void deleteEmployee(Long id) {
         nguoiDungRepository.deleteById(id);
+    }
+
+    /**
+     * Validates a NguoiDung object for all required fields and constraints
+     * @param nguoiDung The NguoiDung object to validate
+     * @throws IllegalArgumentException if validation fails
+     */
+    private void validateNguoiDung(NguoiDung nguoiDung) {
+        validateRequiredFields(nguoiDung);
+        validatePhoneNumber(nguoiDung);
+    }
+    
+    /**
+     * Validates that all required fields for a NguoiDung are present
+     * @param nguoiDung The NguoiDung object to validate
+     * @throws IllegalArgumentException if any required field is missing
+     */
+    private void validateRequiredFields(NguoiDung nguoiDung) {
+        if (nguoiDung.getTenNguoiDung() == null || nguoiDung.getTenNguoiDung().isEmpty()) {
+            throw new IllegalArgumentException("Tên người dùng không được để trống");
+        }
+        
+        if (nguoiDung.getSoDienThoai() == null || nguoiDung.getSoDienThoai().isEmpty()) {
+            throw new IllegalArgumentException("Số điện thoại không được để trống");
+        }
+        
+        if (nguoiDung.getMatKhau() == null || nguoiDung.getMatKhau().isEmpty()) {
+            throw new IllegalArgumentException("Mật khẩu không được để trống");
+        }
+        
+        if (nguoiDung.getVaiTro() == null) {
+            throw new IllegalArgumentException("Vai trò không được để trống");
+        }
+    }
+    
+    /**
+     * Validates that the phone number is valid
+     * @param nguoiDung The NguoiDung object to validate
+     * @throws IllegalArgumentException if phone number is invalid
+     */
+    private void validatePhoneNumber(NguoiDung nguoiDung) {
+        // Validate phone number format
+        String phoneRegex = "^[0-9]{10}$"; // Simple regex for 10 digit phone number
+        if (!nguoiDung.getSoDienThoai().matches(phoneRegex)) {
+            throw new IllegalArgumentException("Số điện thoại phải có 10 chữ số");
+        }
     }
 
     public boolean isPhoneNumberExists(String soDienThoai) {
@@ -53,6 +100,7 @@ public class NguoiDungService {
     }
 
     public void updateNguoiDung(NguoiDung nguoiDung) {
+        validateNguoiDung(nguoiDung);
         nguoiDungRepository.save(nguoiDung);
     }
 }
