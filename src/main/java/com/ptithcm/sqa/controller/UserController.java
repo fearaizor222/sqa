@@ -52,15 +52,15 @@ public class UserController {
         nguoiDung.setMatKhau(currentNguoiDung.getMatKhau());
         nguoiDung.setVaiTro(currentNguoiDung.getVaiTro());
 
-        nguoiDungService.updateNguoiDung(nguoiDung);
-
         try {
             nguoiDungService.updateNguoiDung(nguoiDung);
             redirectAttributes.addFlashAttribute("success", "Cập nhập thông tin thành công!");
+        } catch (IllegalArgumentException e) {
+            String errorMessage = e.getMessage();
+            redirectAttributes.addFlashAttribute("error", errorMessage);
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Cập nhập thông tin thất bại.");
         }
         return "redirect:/user/userinfo";
     }
-
 }
