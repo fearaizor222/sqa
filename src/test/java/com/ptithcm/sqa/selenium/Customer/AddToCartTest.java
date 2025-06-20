@@ -1,4 +1,4 @@
-package com.ptithcm.sqa.Customer;
+package com.ptithcm.sqa.selenium.Customer;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
@@ -22,7 +22,7 @@ public class AddToCartTest {
         private WebDriver driver;
         private WebDriverWait wait;
         private static final String BASE_URL = "http://localhost:2593";
-        private static final String USER_PHONE = "000000000";
+        private static final String USER_PHONE = "0000000000";
         private static final String USER_PASSWORD = "123";
         private static final String PRODUCT_NAME = "Paracetamol";
         private static final String OUT_OF_STOCK_PRODUCT_NAME = "Viên sủi Efferalgan 500mg UPSA SAS giảm đau, hạ sốt (4 vỉ x 4 viên)";

@@ -1,4 +1,4 @@
-package com.ptithcm.sqa.Customer;
+package com.ptithcm.sqa.selenium.Customer;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
@@ -19,14 +19,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class PaymentTest {
+public class CancelOrderTest {
 
     private WebDriver driver;
     private WebDriverWait wait;
     private static final String BASE_URL = "http://localhost:2593";
-    private static final String USER_PHONE = "000000000";
-    private static final String USER_PASSWORD = "123";
-    private static final String PRODUCT_NAME = "Paracetamol";
+    private static final String USER_PHONE = "0000000000"; 
+    private static final String USER_PASSWORD = "123"; 
+    private static final String PRODUCT_NAME = "Paracetamol"; 
 
     @BeforeEach
     public void setUp() {
@@ -90,32 +90,34 @@ public class PaymentTest {
     }
 
     @Test
-    public void testSuccessfulPayment() {
+    public void testSuccessfulCancelOrder() {
         addProductToCart();
         driver.get(BASE_URL + "/cart");
         WebElement cartItem = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".table.table-bordered tbody tr")));
         assertTrue(cartItem.getText().toLowerCase().contains(PRODUCT_NAME.toLowerCase()),
                 "Sản phẩm '" + PRODUCT_NAME + "' không có trong giỏ hàng.");
-        WebElement paymentButton = wait.until(
-                ExpectedConditions.elementToBeClickable(By.cssSelector(".payment-btn")));
+        WebElement cancelButton = wait.until(
+                ExpectedConditions.elementToBeClickable(By.cssSelector(".cancel-btn")));
         JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("document.getElementById('payment-form').submit();");
+        js.executeScript("document.getElementById('cancel-form').submit();");
         WebElement successMessage = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".alert.alert-success")));
-        assertTrue(successMessage.getText().contains("Thanh toán thành công"),
-                "Thông báo thanh toán thành công không hiển thị.");
+        assertTrue(successMessage.getText().contains("Hủy đơn hàng thành công"),
+                "Thông báo hủy đơn hàng thành công không hiển thị.");
+        driver.get(BASE_URL + "/cart");
+        WebElement emptyCartMessage = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.xpath("//p[text()='Giỏ hàng trống.']")));
+        assertTrue(emptyCartMessage.isDisplayed(), "Giỏ hàng không rỗng sau khi hủy đơn hàng.");
     }
 
     @Test
-    public void testPaymentWithEmptyCart() {
+    public void testCancelOrderWithEmptyCart() {
         driver.get(BASE_URL + "/cart");
         WebElement emptyCartMessage = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(By.xpath("//p[text()='Giỏ hàng trống.']")));
         assertTrue(emptyCartMessage.isDisplayed(), "Thông báo 'Giỏ hàng trống.' không hiển thị.");
-        List<WebElement> paymentButtons = driver.findElements(By.cssSelector(".payment-btn"));
         List<WebElement> cancelButtons = driver.findElements(By.cssSelector(".cancel-btn"));
-        assertTrue(paymentButtons.isEmpty(), "Nút thanh toán không nên hiển thị khi giỏ hàng rỗng.");
         assertTrue(cancelButtons.isEmpty(), "Nút hủy không nên hiển thị khi giỏ hàng rỗng.");
     }
 
